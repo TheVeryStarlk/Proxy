@@ -7,5 +7,5 @@
              x:Class="Proxy.Views.ProxyView" x:DataType="vm:ProxyViewModel"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450">
 
-    Welcome to Avalonia!
+    <Button Content="Click me, again!" Command="{Binding ClickCommand}" />
 </UserControl>
