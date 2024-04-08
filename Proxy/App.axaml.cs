@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
+using Proxy.Services;
 using Proxy.ViewModels;
 using Proxy.Views;
 
@@ -19,6 +20,7 @@ internal sealed class App : Application
         .AddTransient<StartViewModel>()
         .AddTransient<ProxyView>()
         .AddTransient<ProxyViewModel>()
+        .AddTransient<ProxyService>()
         .BuildServiceProvider();
 
     public override void Initialize()

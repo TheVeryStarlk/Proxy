@@ -16,7 +16,7 @@
 
             <StackPanel Spacing="5">
                 <TextBlock Text="Port" />
-                <TextBox Watermark="25565" />
+                <TextBox Watermark="25565" MaxLength="5" />
             </StackPanel>
 
             <StackPanel Spacing="5">
@@ -28,7 +28,7 @@
                                ToolTip.Tip="The port the proxy will create."/>
                 </StackPanel>
 
-                <TextBox Watermark="23456" />
+                <TextBox Watermark="23456" MaxLength="5" />
             </StackPanel>
 
             <!-- ReSharper disable once Xaml.StyleClassNotFound -->
