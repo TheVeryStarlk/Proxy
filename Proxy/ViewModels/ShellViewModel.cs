@@ -1,8 +1,12 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Proxy.ViewModels;
 
-internal sealed class ShellViewModel : ObservableObject
+internal sealed partial class ShellViewModel(
+    StartViewModel startViewModel,
+    ProxyViewModel proxyViewModel) : ObservableObject
 {
-    public string Greeting => "Welcome to Avalonia!";
+    [ObservableProperty]
+    private INotifyPropertyChanged current = startViewModel;
 }

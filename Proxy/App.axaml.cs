@@ -15,6 +15,10 @@ internal sealed class App : Application
     public IServiceProvider Services { get; } = new ServiceCollection()
         .AddTransient<ShellView>()
         .AddTransient<ShellViewModel>()
+        .AddTransient<StartView>()
+        .AddTransient<StartViewModel>()
+        .AddTransient<ProxyView>()
+        .AddTransient<ProxyViewModel>()
         .BuildServiceProvider();
 
     public override void Initialize()

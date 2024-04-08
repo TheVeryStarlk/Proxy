@@ -9,7 +9,5 @@
 
         Icon="/Assets/avalonia-logo.ico" Title="Proxy">
 
-    <TextBlock Text="{Binding Greeting}"
-               HorizontalAlignment="Center"
-               VerticalAlignment="Center" />
+        <ContentControl Content="{Binding Current}" />
 </Window>
