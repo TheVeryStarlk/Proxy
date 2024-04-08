@@ -7,7 +7,8 @@
         x:Class="Proxy.Views.ShellView" x:DataType="vm:ShellViewModel"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 
-        Icon="/Assets/avalonia-logo.ico" Title="Proxy">
+        Icon="/Assets/avalonia-logo.ico" Title="Proxy"
+        MinHeight="500" MinWidth="500">
 
         <ContentControl Content="{Binding Current}" />
 </Window>

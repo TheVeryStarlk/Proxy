@@ -1,3 +1,3 @@
 ﻿namespace Proxy.Messages;
 
-internal sealed record NavigationMessage();
+internal sealed record NavigationMessage;
