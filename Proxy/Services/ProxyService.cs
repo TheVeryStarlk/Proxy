@@ -72,39 +72,7 @@ internal sealed class ProxyService : IAsyncDisposable
         return new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
     }
 
-    private async Task ForwardAsync(NetworkStream source, NetworkStream destination, bool outgoing)
-    {
-        while (true)
-        {
-            try
-            {
-                var buffer = new byte[16_777_216];
-                buffer = buffer[..await source.ReadAsync(buffer)];
-                await destination.WriteAsync(buffer);
-
-                using var header = new MemoryStream(buffer);
-
-                header.ReadVariableInteger();
-                var identifier = header.ReadVariableInteger();
-
-                OnMessageReceived?.Invoke(
-                    this,
-                    new ProxyEventArgs(new Message(
-                        identifier,
-                        buffer.AsMemory()[(int) header.Position..],
-                        outgoing)));
-            }
-            catch
-            {
-                break;
-            }
-        }
-    }
-}
-
-internal static class StreamExtensions
-{
-    public static int ReadVariableInteger(this Stream stream)
+    private static int ReadVariableInteger(Stream stream)
     {
         var numRead = 0;
         var result = 0;
@@ -125,5 +93,34 @@ internal static class StreamExtensions
         } while ((read & 0b10000000) != 0);
 
         return result;
+    }
+
+    private async Task ForwardAsync(NetworkStream source, NetworkStream destination, bool outgoing)
+    {
+        while (true)
+        {
+            try
+            {
+                var buffer = new byte[16_777_216];
+                buffer = buffer[..await source.ReadAsync(buffer)];
+                await destination.WriteAsync(buffer);
+
+                using var header = new MemoryStream(buffer);
+
+                var length = ReadVariableInteger(header);
+                var identifier = ReadVariableInteger(header);
+
+                OnMessageReceived?.Invoke(
+                    this,
+                    new ProxyEventArgs(new Message(
+                        identifier,
+                        buffer.AsMemory()[(int) header.Position..],
+                        outgoing)));
+            }
+            catch
+            {
+                break;
+            }
+        }
     }
 }
