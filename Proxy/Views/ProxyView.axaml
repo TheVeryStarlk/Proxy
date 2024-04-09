@@ -14,6 +14,7 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" Spacing="5">
+                        <TextBlock Text="{Binding Outgoing}" />
                         <TextBlock Text="{Binding Identifier}" />
                         <TextBlock Text="{Binding Memory}" />
                     </StackPanel>

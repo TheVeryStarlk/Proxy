@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
@@ -40,8 +41,8 @@ internal sealed class ProxyService : IAsyncDisposable
                 await using var source = new NetworkStream(minecraft);
 
                 await Task.WhenAny(
-                    ForwardAsync(destination, source),
-                    ForwardAsync(source, destination));
+                    ForwardAsync(destination, source, false),
+                    ForwardAsync(source, destination, true));
             }
             catch
             {
@@ -71,7 +72,7 @@ internal sealed class ProxyService : IAsyncDisposable
         return new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
     }
 
-    private async Task ForwardAsync(NetworkStream source, NetworkStream destination)
+    private async Task ForwardAsync(NetworkStream source, NetworkStream destination, bool outgoing)
     {
         while (true)
         {
@@ -81,14 +82,45 @@ internal sealed class ProxyService : IAsyncDisposable
                 buffer = buffer[..await source.ReadAsync(buffer)];
                 await destination.WriteAsync(buffer);
 
+                using var header = new MemoryStream(buffer);
+
+                var length = header.ReadVariableInteger();
+                var identifier = header.ReadVariableInteger();
+
                 OnMessageReceived?.Invoke(
                     this,
-                    new ProxyEventArgs(new Message(buffer[0], buffer)));
+                    new ProxyEventArgs(new Message(identifier, buffer, outgoing)));
             }
             catch
             {
                 break;
             }
         }
+    }
+}
+
+internal static class StreamExtensions
+{
+    public static int ReadVariableInteger(this Stream stream)
+    {
+        var numRead = 0;
+        var result = 0;
+        byte read;
+
+        do
+        {
+            read = (byte) stream.ReadByte();
+            var value = read & 0b01111111;
+            result |= value << (7 * numRead);
+
+            numRead++;
+
+            if (numRead > 5)
+            {
+                throw new InvalidOperationException("Variable integer is too big.");
+            }
+        } while ((read & 0b10000000) != 0);
+
+        return result;
     }
 }
