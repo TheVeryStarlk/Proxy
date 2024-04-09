@@ -18,7 +18,11 @@
                     Command="{Binding StopCommand}" />
 
             <CheckBox Content="Scroll to bottom"
-                      IsChecked="{Binding ScrollToBottom}"/>
+                      IsChecked="{Binding ScrollToBottom}" />
+
+            <Button Content="Clear all" Command="{Binding ClearAllCommand}" />
+
+            <TextBlock Text="{Binding Messages.Count,StringFormat='{}{0} Message(s)'}" />
         </StackPanel>
 
         <ListBox ItemsSource="{Binding Messages}"
@@ -42,5 +46,6 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+
     </Grid>
 </UserControl>

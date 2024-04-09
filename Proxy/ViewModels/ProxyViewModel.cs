@@ -47,4 +47,10 @@ internal sealed partial class ProxyViewModel : ObservableObject
         await proxyService.DisposeAsync();
         WeakReferenceMessenger.Default.Send<NavigationMessage>();
     }
+
+    [RelayCommand]
+    private void ClearAll()
+    {
+        Messages.Clear();
+    }
 }
