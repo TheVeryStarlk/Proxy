@@ -7,5 +7,14 @@
              x:Class="Proxy.Views.ProxyView" x:DataType="vm:ProxyViewModel"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450">
 
-    <Button Content="Click me, again!" Command="{Binding ClickCommand}" />
+    <ItemsControl ItemsSource="{Binding Messages}">
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <StackPanel Orientation="Horizontal" Spacing="5">
+                    <TextBlock Text="{Binding Identifier}" />
+                    <TextBlock Text="{Binding Memory}" />
+                </StackPanel>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
 </UserControl>

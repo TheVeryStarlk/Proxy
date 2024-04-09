@@ -19,8 +19,8 @@ internal sealed class App : Application
         .AddTransient<StartView>()
         .AddTransient<StartViewModel>()
         .AddTransient<ProxyView>()
-        .AddTransient<ProxyViewModel>()
-        .AddTransient<ProxyService>()
+        .AddSingleton<ProxyViewModel>()
+        .AddSingleton<ProxyService>()
         .BuildServiceProvider();
 
     public override void Initialize()
