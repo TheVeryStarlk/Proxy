@@ -4,7 +4,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Proxy.Messages;
-using Proxy.Models;
 using Proxy.Services;
 
 namespace Proxy.ViewModels;
@@ -12,7 +11,7 @@ namespace Proxy.ViewModels;
 internal sealed partial class ProxyViewModel : ObservableObject
 {
     [ObservableProperty]
-    private ObservableCollection<Message> messages = [];
+    private ObservableCollection<MessageViewModel> messages = [];
 
     private readonly ProxyService proxyService;
 
@@ -26,7 +25,7 @@ internal sealed partial class ProxyViewModel : ObservableObject
 
         proxyService.OnMessageReceived += (_, eventArgs) =>
         {
-            Messages.Add(eventArgs.Message);
+            Messages.Add(new MessageViewModel(eventArgs.Message));
         };
     }
 

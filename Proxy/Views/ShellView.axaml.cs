@@ -13,7 +13,6 @@ internal sealed partial class ShellView : Window
         InitializeComponent();
     }
 
-
     protected override async void OnClosing(WindowClosingEventArgs eventArgs)
     {
         await App.Current.Services

@@ -3,23 +3,32 @@
              xmlns:vm="using:Proxy.ViewModels"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:views="clr-namespace:Proxy.Views"
 
              x:Class="Proxy.Views.ProxyView" x:DataType="vm:ProxyViewModel"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450">
 
-    <StackPanel Spacing="10">
-        <Button Content="Stop" Command="{Binding StopCommand}" />
+    <Grid RowDefinitions="Auto *">
+        <StackPanel Orientation="Horizontal"
+                    Spacing="10"
+                    Margin="10"
+                    Grid.Row="0">
 
-        <ItemsControl ItemsSource="{Binding Messages}">
-            <ItemsControl.ItemTemplate>
+            <Button Content="Stop"
+                    Command="{Binding StopCommand}" />
+
+            <CheckBox Content="Always scroll to bottom" />
+        </StackPanel>
+
+        <ListBox ItemsSource="{Binding Messages}"
+                 Margin="10 0 10 10"
+                 Grid.Row="1">
+
+            <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal" Spacing="5">
-                        <TextBlock Text="{Binding Outgoing}" />
-                        <TextBlock Text="{Binding Identifier}" />
-                        <TextBlock Text="{Binding Memory}" />
-                    </StackPanel>
+                    <views:MessageView DataContext="{Binding}" />
                 </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </StackPanel>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
 </UserControl>

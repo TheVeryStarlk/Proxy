@@ -24,7 +24,7 @@
 
             <StackPanel Spacing="5">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Listening Port" />
+                    <TextBlock Text="Listening port" />
 
                     <TextBlock Text=" (?)"
                                Opacity="0.75"
