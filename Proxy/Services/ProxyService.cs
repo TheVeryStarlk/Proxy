@@ -14,10 +14,6 @@ internal sealed class ProxyService : IAsyncDisposable
         // var socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
         // await socket.ConnectAsync(endPoint);
 
-        OnMessageReceived?.Invoke(
-            this,
-            new ProxyEventArgs(new Message(0, ReadOnlyMemory<byte>.Empty)));
-
         return Task.CompletedTask;
     }
 

@@ -19,7 +19,7 @@ internal sealed class App : Application
         .AddTransient<StartView>()
         .AddTransient<StartViewModel>()
         .AddTransient<ProxyView>()
-        .AddSingleton<ProxyViewModel>()
+        .AddTransient<ProxyViewModel>()
         .AddSingleton<ProxyService>()
         .BuildServiceProvider();
 
