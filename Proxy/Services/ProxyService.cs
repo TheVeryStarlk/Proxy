@@ -84,12 +84,15 @@ internal sealed class ProxyService : IAsyncDisposable
 
                 using var header = new MemoryStream(buffer);
 
-                var length = header.ReadVariableInteger();
+                header.ReadVariableInteger();
                 var identifier = header.ReadVariableInteger();
 
                 OnMessageReceived?.Invoke(
                     this,
-                    new ProxyEventArgs(new Message(identifier, buffer, outgoing)));
+                    new ProxyEventArgs(new Message(
+                        identifier,
+                        buffer.AsMemory()[(int) header.Position..],
+                        outgoing)));
             }
             catch
             {
