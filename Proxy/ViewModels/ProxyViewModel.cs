@@ -13,6 +13,12 @@ internal sealed partial class ProxyViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<MessageViewModel> messages = [];
 
+    [ObservableProperty]
+    private bool scrollToBottom = true;
+
+    [ObservableProperty]
+    private MessageViewModel? selectedMessage;
+
     private readonly ProxyService proxyService;
 
     public ProxyViewModel(ProxyService proxyService)
@@ -25,7 +31,13 @@ internal sealed partial class ProxyViewModel : ObservableObject
 
         proxyService.OnMessageReceived += (_, eventArgs) =>
         {
-            Messages.Add(new MessageViewModel(eventArgs.Message));
+            var message = new MessageViewModel(eventArgs.Message);
+            Messages.Add(message);
+
+            if (ScrollToBottom)
+            {
+                SelectedMessage = message;
+            }
         };
     }
 

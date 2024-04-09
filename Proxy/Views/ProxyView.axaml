@@ -17,12 +17,24 @@
             <Button Content="Stop"
                     Command="{Binding StopCommand}" />
 
-            <CheckBox Content="Always scroll to bottom" />
+            <CheckBox Content="Scroll to bottom"
+                      IsChecked="{Binding ScrollToBottom}"/>
         </StackPanel>
 
         <ListBox ItemsSource="{Binding Messages}"
+                 Background="Transparent"
                  Margin="10 0 10 10"
+                 SelectedItem="{Binding SelectedMessage}"
                  Grid.Row="1">
+
+            <ListBox.Styles>
+                <Style Selector="ListBoxItem">
+                    <Setter Property="CornerRadius"
+                            Value="{StaticResource ControlCornerRadius}" />
+
+                    <Setter Property="Margin" Value="0 5 0 0"></Setter>
+                </Style>
+            </ListBox.Styles>
 
             <ListBox.ItemTemplate>
                 <DataTemplate>
