@@ -7,14 +7,18 @@
              x:Class="Proxy.Views.ProxyView" x:DataType="vm:ProxyViewModel"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450">
 
-    <ItemsControl ItemsSource="{Binding Messages}">
-        <ItemsControl.ItemTemplate>
-            <DataTemplate>
-                <StackPanel Orientation="Horizontal" Spacing="5">
-                    <TextBlock Text="{Binding Identifier}" />
-                    <TextBlock Text="{Binding Memory}" />
-                </StackPanel>
-            </DataTemplate>
-        </ItemsControl.ItemTemplate>
-    </ItemsControl>
+    <StackPanel Spacing="10">
+        <Button Content="Stop" Command="{Binding StopCommand}" />
+
+        <ItemsControl ItemsSource="{Binding Messages}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <TextBlock Text="{Binding Identifier}" />
+                        <TextBlock Text="{Binding Memory}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </StackPanel>
 </UserControl>

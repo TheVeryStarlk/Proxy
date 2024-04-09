@@ -30,7 +30,7 @@ internal sealed partial class StartViewModel(ProxyService proxyService) : Observ
             IsLoading = true;
 
             var endPoint = new IPEndPoint(IPAddress.Parse(Address), Port);
-            await proxyService.StartAsync(endPoint, listening);
+            await proxyService.StartAsync(endPoint, Listening);
 
             WeakReferenceMessenger.Default.Send<NavigationMessage>();
         }
