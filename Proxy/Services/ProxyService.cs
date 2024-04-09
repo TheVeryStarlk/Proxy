@@ -11,16 +11,21 @@ internal sealed class ProxyService : IAsyncDisposable
 {
     public event EventHandler<ProxyEventArgs>? OnMessageReceived;
 
+    public event EventHandler? OnStopped;
+
     private Socket? avalonia;
     private Socket? listener;
     private Socket? minecraft;
+    private bool running;
 
     public async Task StartAsync(IPEndPoint endPoint, ushort listening)
     {
-        if (avalonia is not null && listener is not null && minecraft is not null)
+        if (running)
         {
             throw new InvalidOperationException("Already connected.");
         }
+
+        running = true;
 
         avalonia = CreateSocket(endPoint);
 
@@ -35,33 +40,26 @@ internal sealed class ProxyService : IAsyncDisposable
 
         _ = Task.Run(async () =>
         {
-            try
-            {
-                await using var destination = new NetworkStream(avalonia);
-                await using var source = new NetworkStream(minecraft);
+            await using var destination = new NetworkStream(avalonia);
+            await using var source = new NetworkStream(minecraft);
 
-                await Task.WhenAny(
-                    ForwardAsync(destination, source, false),
-                    ForwardAsync(source, destination, true));
-            }
-            catch
-            {
-                // Definitely should log.
-            }
+            await Task.WhenAny(
+                ForwardAsync(destination, source, false),
+                ForwardAsync(source, destination, true));
         });
     }
 
     public ValueTask DisposeAsync()
     {
-        if (avalonia is not null && listener is not null && minecraft is not null)
+        if (running)
         {
-            avalonia.Dispose();
-            listener.Dispose();
-            minecraft.Dispose();
+            avalonia?.Dispose();
+            listener?.Dispose();
+            minecraft?.Dispose();
 
-            avalonia = null;
-            listener = null;
-            minecraft = null;
+            running = false;
+
+            OnStopped?.Invoke(this, EventArgs.Empty);
         }
 
         return ValueTask.CompletedTask;
@@ -82,7 +80,7 @@ internal sealed class ProxyService : IAsyncDisposable
         {
             read = (byte) stream.ReadByte();
             var value = read & 0b01111111;
-            result |= value << (7 * numRead);
+            result |= value << 7 * numRead;
 
             numRead++;
 
@@ -107,7 +105,7 @@ internal sealed class ProxyService : IAsyncDisposable
 
                 using var header = new MemoryStream(buffer);
 
-                var length = ReadVariableInteger(header);
+                _ = ReadVariableInteger(header);
                 var identifier = ReadVariableInteger(header);
 
                 OnMessageReceived?.Invoke(
@@ -122,5 +120,7 @@ internal sealed class ProxyService : IAsyncDisposable
                 break;
             }
         }
+
+        await DisposeAsync();
     }
 }

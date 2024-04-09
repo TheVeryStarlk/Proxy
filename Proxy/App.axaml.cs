@@ -19,7 +19,7 @@ internal sealed class App : Application
         .AddTransient<StartView>()
         .AddTransient<StartViewModel>()
         .AddTransient<ProxyView>()
-        .AddTransient<ProxyViewModel>()
+        .AddSingleton<ProxyViewModel>()
         .AddTransient<MessageView>()
         .AddTransient<MessageViewModel>()
         .AddSingleton<ProxyService>()

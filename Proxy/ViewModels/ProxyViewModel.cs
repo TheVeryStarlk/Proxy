@@ -19,6 +19,8 @@ internal sealed partial class ProxyViewModel : ObservableObject
     [ObservableProperty]
     private MessageViewModel? selectedMessage;
 
+    private bool isForceStop;
+
     private readonly ProxyService proxyService;
 
     public ProxyViewModel(ProxyService proxyService)
@@ -39,11 +41,23 @@ internal sealed partial class ProxyViewModel : ObservableObject
                 SelectedMessage = message;
             }
         };
+
+        proxyService.OnStopped += (_, _) =>
+        {
+            if (isForceStop)
+            {
+                return;
+            }
+
+            WeakReferenceMessenger.Default.Send<NavigationMessage>();
+        };
     }
 
     [RelayCommand]
     private async Task StopAsync()
     {
+        isForceStop = true;
+
         await proxyService.DisposeAsync();
         WeakReferenceMessenger.Default.Send<NavigationMessage>();
     }
