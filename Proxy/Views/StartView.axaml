@@ -11,12 +11,15 @@
         <StackPanel VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" Spacing="15">
             <StackPanel Spacing="5">
                 <TextBlock Text="Address" />
-                <TextBox Watermark="127.0.0.1" />
+                <TextBox Watermark="127.0.0.1" Text="{Binding Address}" />
             </StackPanel>
 
             <StackPanel Spacing="5">
                 <TextBlock Text="Port" />
-                <TextBox Watermark="25565" MaxLength="5" />
+
+                <TextBox Watermark="25565"
+                         Text="{Binding Port}"
+                         MaxLength="5" />
             </StackPanel>
 
             <StackPanel Spacing="5">
@@ -25,16 +28,26 @@
 
                     <TextBlock Text=" (?)"
                                Opacity="0.75"
-                               ToolTip.Tip="The port the proxy will create."/>
+                               ToolTip.Tip="The port the proxy will create." />
                 </StackPanel>
 
-                <TextBox Watermark="23456" MaxLength="5" />
+                <TextBox Watermark="23456"
+                         Text="{Binding Listening}"
+                         MaxLength="5" />
             </StackPanel>
 
-            <!-- ReSharper disable once Xaml.StyleClassNotFound -->
-            <Button Content="Start"
-                    Command="{Binding StartCommand}"
-                    Classes="accent" />
+            <StackPanel Orientation="Horizontal" Spacing="10">
+
+                <!-- ReSharper disable once Xaml.StyleClassNotFound -->
+                <Button Content="Start"
+                        IsEnabled="{Binding !IsLoading}"
+                        Command="{Binding StartCommand}"
+                        Classes="accent">
+                </Button>
+
+                <ProgressBar IsVisible="{Binding IsLoading}"
+                             IsIndeterminate="True" />
+            </StackPanel>
         </StackPanel>
     </Grid>
 </UserControl>

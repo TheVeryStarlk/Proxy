@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using Proxy.Models;
 
@@ -9,12 +10,18 @@ internal sealed class ProxyService : IAsyncDisposable
 {
     public event EventHandler<ProxyEventArgs>? OnMessageReceived;
 
-    public Task StartAsync(IPEndPoint endPoint)
+    public async Task StartAsync(IPEndPoint endPoint, ushort listening)
     {
-        // var socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-        // await socket.ConnectAsync(endPoint);
+        using var socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
-        return Task.CompletedTask;
+        await socket.ConnectAsync(endPoint);
+
+        using var listener = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+
+        listener.Bind(new IPEndPoint(endPoint.Address, listening));
+        listener.Listen();
+
+        using var client = await listener.AcceptAsync();
     }
 
     public ValueTask DisposeAsync()

@@ -16,19 +16,31 @@ internal sealed partial class StartViewModel(ProxyService proxyService) : Observ
     [ObservableProperty]
     private ushort port = 25565;
 
+    [ObservableProperty]
+    private ushort listening = 23456;
+
+    [ObservableProperty]
+    private bool isLoading;
+
     [RelayCommand]
     private async Task StartAsync()
     {
         try
         {
+            IsLoading = true;
+
             var endPoint = new IPEndPoint(IPAddress.Parse(Address), Port);
-            await proxyService.StartAsync(endPoint);
+            await proxyService.StartAsync(endPoint, listening);
 
             WeakReferenceMessenger.Default.Send<NavigationMessage>();
         }
         catch
         {
             // Log or something.
+        }
+        finally
+        {
+            IsLoading = false;
         }
     }
 }
